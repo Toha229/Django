@@ -35,10 +35,21 @@ def index(request, context):
 @context_data
 def shop(request, context):
     search_query = request.GET.get('search')
-    if (search_query):
+    from_query = request.GET.get('from')
+    to_query = request.GET.get('to')
+
+    if search_query:
         products = Product.objects.filter(
             name__icontains=search_query).order_by('name')
         context['products'] = products
+
+    if from_query and to_query:
+        if int(from_query) < int(to_query):
+            products = Product.objects.filter(
+                price__gt=from_query, price__lt=to_query).order_by('name')
+            context['products'] = products
+            context['filter'] = True
+
     return render(request, 'pages/shop.html', context)
 
 
