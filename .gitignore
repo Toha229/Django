@@ -1,0 +1,7 @@
+env*
+venv*
+*.log
+photos*
+uploads*
+vscode*
+uploads*
