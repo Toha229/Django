@@ -3,46 +3,54 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, Pass
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
+from product.models import Contact
+
 
 class RegistrationForm(UserCreationForm):
-  password1 = forms.CharField(
-      label=_("Password"),
-      widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
-  )
-  password2 = forms.CharField(
-      label=_("Confirm Password"),
-      widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
-  )
+    password1 = forms.CharField(
+        label=_("Password"),
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control', 'placeholder': 'Password'}),
+    )
+    password2 = forms.CharField(
+        label=_("Confirm Password"),
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
+    )
 
-  class Meta:
-    model = User
-    fields = ('username', 'email', )
+    class Meta:
+        model = User
+        fields = ('username', 'email', )
 
-    widgets = {
-      'username': forms.TextInput(attrs={
-          'class': 'form-control',
-          'placeholder': 'Username'
-      }),
-      'email': forms.EmailInput(attrs={
-          'class': 'form-control',
-          'placeholder': 'Email'
-      })
-    }
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Username'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Email'
+            })
+        }
 
 
 class LoginForm(AuthenticationForm):
-  username = UsernameField(label=_("Your Username"), widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Username"}))
-  password = forms.CharField(
-      label=_("Your Password"),
-      strip=False,
-      widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
-  )
+    username = UsernameField(label=_("Your Username"), widget=forms.TextInput(
+        attrs={"class": "form-control", "placeholder": "Username"}))
+    password = forms.CharField(
+        label=_("Your Password"),
+        strip=False,
+        widget=forms.PasswordInput(
+            attrs={"class": "form-control", "placeholder": "Password"}),
+    )
+
 
 class UserPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={
         'class': 'form-control',
         'placeholder': 'Email'
     }))
+
 
 class UserSetPasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
@@ -51,7 +59,7 @@ class UserSetPasswordForm(SetPasswordForm):
     new_password2 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
         'class': 'form-control', 'placeholder': 'Confirm New Password'
     }), label="Confirm New Password")
-    
+
 
 class UserPasswordChangeForm(PasswordChangeForm):
     old_password = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
@@ -63,3 +71,18 @@ class UserPasswordChangeForm(PasswordChangeForm):
     new_password2 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
         'class': 'form-control', 'placeholder': 'Confirm New Password'
     }), label="Confirm New Password")
+
+
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ('name', 'email', 'subject', 'description')
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'required': 'required'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'required': 'required', 'id': 'email', 'type': 'email'}),
+            'subject': forms.TextInput(attrs={'class': 'form-control', 'required': 'required'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'required': 'required'}),
+        }
+

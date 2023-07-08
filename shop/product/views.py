@@ -1,6 +1,8 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+
+from admin_datta.forms import ContactForm
 from . models import Basket, Product, Category
 from django.core.paginator import Paginator
 from functools import wraps
@@ -60,6 +62,18 @@ def checkout(request, search, context):
 
 @context_data
 def contact(request, context):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            try:
+                form.save()
+            except Exception as ex:
+                print(ex)
+            return redirect('index')
+    else:
+        form = ContactForm()
+
+    context['form'] = form
     return render(request, 'pages/contact.html', context)
 
 

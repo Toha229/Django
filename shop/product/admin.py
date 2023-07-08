@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product
+from .models import Category, Product, Contact
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -17,5 +17,13 @@ class CategoryAdmin(admin.ModelAdmin):
     list_per_page = 30
 
 
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'email', 'subject')
+    list_display_links = ('id', 'subject')
+    list_per_page = 30
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
+
+admin.site.register(Contact, ContactAdmin)

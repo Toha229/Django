@@ -90,3 +90,15 @@ class Basket(models.Model):
             basket.save()
             is_created = False
             return basket, is_created
+
+
+class Contact(models.Model):
+    class Meta:
+        db_table = "contact"
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100)
+    subject = models.CharField(max_length=100)
+    description = models.TextField(blank=False)
+
+    def __str__(self):
+        return f"{self.name} {self.email} {self.subject} {self.description}"
