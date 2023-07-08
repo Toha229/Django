@@ -32,12 +32,17 @@ def context_data(func):
 @context_data
 def index(request, context):
     user = request.user
-    recents = RecentProduct.objects.filter(user=user).order_by('-id')[:4]
-    if recents:
-        products = []
-        for recent in recents:
-            products.append(Product.objects.get(pk=recent.product.pk))
-        context['recent'] = products
+    print(user)
+    if not user.is_anonymous:
+        recents = RecentProduct.objects.filter(user=user).order_by('-id')[:4]
+        if recents:
+            products = []
+            for recent in recents:
+                products.append(Product.objects.get(pk=recent.product.pk))
+            context['recent'] = products
+
+    newest = Product.objects.order_by('-id')[:4]
+    context['newest'] = newest
         
     return render(request, 'pages/index.html', context)
 
