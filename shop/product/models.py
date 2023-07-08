@@ -102,3 +102,10 @@ class Contact(models.Model):
 
     def __str__(self):
         return f"{self.name} {self.email} {self.subject} {self.description}"
+
+
+class RecentProduct(models.Model):
+    class Meta:
+        db_table = "recent_product"
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)

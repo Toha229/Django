@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from admin_datta.forms import ContactForm
-from . models import Basket, Product, Category
+from . models import Basket, Product, Category, RecentProduct
 from django.core.paginator import Paginator
 from functools import wraps
 from users.models import CustomUser
@@ -31,6 +31,14 @@ def context_data(func):
 
 @context_data
 def index(request, context):
+    user = request.user
+    recents = RecentProduct.objects.filter(user=user).order_by('-id')[:4]
+    if recents:
+        products = []
+        for recent in recents:
+            products.append(Product.objects.get(pk=recent.product.pk))
+        context['recent'] = products
+        
     return render(request, 'pages/index.html', context)
 
 
@@ -107,6 +115,14 @@ def products_by_category(request, category_id, context):
 
 @context_data
 def detail(request, product_id, context):
+    user = request.user
+    if user:
+        recent = RecentProduct.objects.filter(user=user, product_id=product_id).first()
+        if recent:
+            recent.delete()
+        RecentProduct.objects.create(
+            user=user, product_id=product_id)
+        
     products = get_object_or_404(Product, id=product_id)
     categories = Category.objects.order_by('name')
     context = {
